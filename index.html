@@ -56,8 +56,12 @@ function valid(){return /^[6-9]\d{9}$/.test(phone())}
 function data(final){return{id:ID,phone:phone(),name:$('name').value.trim(),city:$('city').value.trim(),course:sel.course.join(', '),country:sel.country.join(', '),intake:sel.intake.join(', '),branch:sel.branch.join(', '),source:SOURCE,final:!!final}}
 function send(final,cb){var d=data(final),s=JSON.stringify(d);if(!final&&s===lastSent)return;lastSent=s;
   var body=JSON.stringify(d);
-  fetch(EXEC,{method:'POST',mode:'no-cors',credentials:'omit',keepalive:!final,headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(){cb&&cb(true)}).catch(function(){cb&&cb(false)})}
-function soon(){if(!valid())return;clearTimeout(timer);timer=setTimeout(function(){send(false)},700)}
+  fetch(EXEC,{method:'POST',mode:'no-cors',credentials:'omit',keepalive:!final,headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(){cb&&cb(true)}).catch(function(){lastSent='';cb&&cb(false)})}
+var firstSent=false, done=false;
+function soon(){if(!valid()||done)return;clearTimeout(timer);if(!firstSent){firstSent=true;send(false);return}timer=setTimeout(function(){send(false)},700)}
+function beacon(){if(!valid()||done)return;clearTimeout(timer);var b=JSON.stringify(data(false));if(b===lastSent)return;lastSent=b;try{if(navigator.sendBeacon&&navigator.sendBeacon(EXEC,new Blob([b],{type:'text/plain;charset=utf-8'})))return}catch(e){}lastSent='';send(false)}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')beacon()});
+window.addEventListener('pagehide',beacon);
 $('phone').addEventListener('input',function(){var m=$('pmsg');if(phone().length>=10&&!valid()){m.innerHTML='<span class="err">Please check the number: it should be a 10-digit Indian mobile.</span>'}else{m.textContent='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.'}soon()});
 ['phone','name','city'].forEach(function(i){$(i).addEventListener('blur',soon);$(i).addEventListener('input',soon)});
 document.querySelectorAll('.chips').forEach(function(g){g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=g.dataset.k,v=b.textContent;
@@ -66,7 +70,7 @@ $('f').addEventListener('submit',function(e){e.preventDefault();
   if(!valid()){$('pmsg').innerHTML='<span class="err">Please enter a valid 10-digit mobile number.</span>';$('phone').focus();return}
   if(!$('name').value.trim()){$('name').focus();$('name').style.borderColor='#AC070D';return}
   clearTimeout(timer);$('go').disabled=true;$('go').textContent='Sending...';
-  send(true,function(ok){if(ok){try{localStorage.removeItem('usa_lead_id')}catch(e){}
+  send(true,function(ok){if(ok){done=true;try{localStorage.removeItem('usa_lead_id')}catch(e){}
     $('card').innerHTML='<div class="done"><div style="font-size:44px">🎉</div><h2>Thank you, '+$('name').value.trim().replace(/[<>&"]/g,'')+'!</h2><p>A UniSmart counsellor will call you within 24 hours.</p><a class="wa" href="https://wa.me/918108772314?text=Hi%20UniSmart%2C%20I%20just%20filled%20the%20enquiry%20form">Chat on WhatsApp now</a></div>'}
     else{$('go').disabled=false;$('go').textContent='Request a call back';alert('Network problem. Please try again, or WhatsApp us on 81087 72314.')}})});
 </script></body></html>
