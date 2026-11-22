@@ -30,7 +30,7 @@ footer{text-align:center;font-size:12.5px;color:var(--mut);margin-top:18px;line-
 <main><div class="card" id="card">
 <form id="f" novalidate>
 <label for="phone">Phone / WhatsApp number *</label>
-<div class="ph"><span>+91</span><input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="10-digit mobile number" required></div>
+<div class="ph"><span>+91</span><input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="15" pattern="[0-9]*" placeholder="Mobile number (numbers only)" required></div>
 <div class="hint" id="pmsg">By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.</div>
 <label for="name">Your name *</label><input id="name" autocomplete="name" placeholder="Full name" required>
 <label for="city">City</label><input id="city" autocomplete="address-level2" placeholder="e.g. Mumbai, Thane, Pune">
@@ -52,7 +52,7 @@ var ID = (function(){try{var k='usa_lead_id',v=localStorage.getItem(k);if(!v){v=
 var sel={course:[],country:[],intake:[],branch:[]}, timer=null, lastSent='';
 function $(i){return document.getElementById(i)}
 function phone(){var d=$('phone').value.replace(/\D/g,'');if(d.length===12&&d.indexOf('91')===0)d=d.slice(2);return d}
-function valid(){return /^[6-9]\d{9}$/.test(phone())}
+function valid(){return /^\d{10,15}$/.test(phone())}
 function data(final){return{id:ID,phone:phone(),name:$('name').value.trim(),city:$('city').value.trim(),course:sel.course.join(', '),country:sel.country.join(', '),intake:sel.intake.join(', '),branch:sel.branch.join(', '),source:SOURCE,final:!!final}}
 function send(final,cb){var d=data(final),s=JSON.stringify(d);if(!final&&s===lastSent)return;lastSent=s;
   var body=JSON.stringify(d);
@@ -62,12 +62,12 @@ function soon(){if(!valid()||done)return;clearTimeout(timer);if(!firstSent){firs
 function beacon(){if(!valid()||done)return;clearTimeout(timer);var b=JSON.stringify(data(false));if(b===lastSent)return;lastSent=b;try{if(navigator.sendBeacon&&navigator.sendBeacon(EXEC,new Blob([b],{type:'text/plain;charset=utf-8'})))return}catch(e){}lastSent='';send(false)}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')beacon()});
 window.addEventListener('pagehide',beacon);
-$('phone').addEventListener('input',function(){var m=$('pmsg');if(phone().length>=10&&!valid()){m.innerHTML='<span class="err">Please check the number: it should be a 10-digit Indian mobile.</span>'}else{m.textContent='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.'}soon()});
+$('phone').addEventListener('input',function(){var p=$('phone'),c=p.value.replace(/[^\d]/g,'');if(c!==p.value)p.value=c;var m=$('pmsg');if(phone().length>15){m.innerHTML='<span class="err">That number looks too long. Please check it.</span>'}else{m.textContent='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.'}soon()});
 ['phone','name','city'].forEach(function(i){$(i).addEventListener('blur',soon);$(i).addEventListener('input',soon)});
 document.querySelectorAll('.chips').forEach(function(g){g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=g.dataset.k,v=b.textContent;
   if(g.dataset.one){g.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});sel[k]=[v];b.classList.add('on')}else{b.classList.toggle('on');sel[k]=[].map.call(g.querySelectorAll('.on'),function(x){return x.textContent})}soon()})});
 $('f').addEventListener('submit',function(e){e.preventDefault();
-  if(!valid()){$('pmsg').innerHTML='<span class="err">Please enter a valid 10-digit mobile number.</span>';$('phone').focus();return}
+  if(!valid()){$('pmsg').innerHTML='<span class="err">Please enter your phone number (at least 10 digits).</span>';$('phone').focus();return}
   if(!$('name').value.trim()){$('name').focus();$('name').style.borderColor='#AC070D';return}
   clearTimeout(timer);$('go').disabled=true;$('go').textContent='Sending...';
   send(true,function(ok){if(ok){done=true;try{localStorage.removeItem('usa_lead_id')}catch(e){}
