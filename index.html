@@ -66,13 +66,11 @@ function soon(){if(!valid()||done)return;clearTimeout(timer);if(!firstSent){firs
 function beacon(){if(!valid()||done)return;clearTimeout(timer);var b=JSON.stringify(data(false));if(b===lastSent)return;lastSent=b;try{if(navigator.sendBeacon&&navigator.sendBeacon(EXEC,new Blob([b],{type:'text/plain;charset=utf-8'})))return}catch(e){}lastSent='';send(false)}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')beacon()});
 window.addEventListener('pagehide',beacon);
-function check(){var p=$('phone'),c=p.value.replace(/\D/g,'');
+function check(e){var p=$('phone'),c=p.value.replace(/\D/g,'');
   if(c.length===12&&c.indexOf('91')===0&&cc()===''){$('cc').value='91';c=c.slice(2)}
+  if(c.length>lim()&&!(e&&e.inputType==='insertFromPaste')&&!p.classList.contains('over'))c=c.slice(0,lim());
   if(c!==p.value)p.value=c;var m=$('pmsg'),over=c.length>lim();p.classList.toggle('over',over);
   if(over){m.innerHTML='<span class="err">Enter '+lim()+' digits only'+(lim()===10?'':' (max)')+'.</span>'}else{m.textContent=CONSENT}soon()}
-$('phone').addEventListener('beforeinput',function(e){if(e.inputType!=='insertText'||e.data==null)return;
-  if(/\D/.test(e.data)){e.preventDefault();return}
-  var p=$('phone');if(p.selectionStart===p.selectionEnd&&phone().length>=lim())e.preventDefault()});
 $('phone').addEventListener('input',check);
 $('cc').addEventListener('change',check);
 (function(){function set(a){var t=a.filter(function(x){return x}).join(', ');if(t){LOC=t.slice(0,120);soon()}}
