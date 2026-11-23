@@ -1,15 +1,14 @@
 # UniSmart Admits enquiry form
 
 Public link: https://atharavwork.github.io/unismart-enquiry/?src=<channel>
-(channel = instagram, linkedin, facebook, website, qr, whatsapp, google, youtube, referral, event)
-
-Event sign-ups (staff phone at seminars): `?src=event&staff=<Name>` gives a "Save & next person" button and a counter.
+(channel = instagram, linkedin, facebook, website, qr, whatsapp, google, youtube, referral)
 
 ## Files
 - `index.html`: the page (logo is embedded).
 - `assets/style.css`: look and feel (brand red #AC070D, Manrope).
 - `assets/app.js`: behaviour. Saves the number the moment it is complete, keeps unsent saves on the phone until
-  they go out, one row per visit / per different number, spam guard, event mode, optional GPS area.
+  they go out, one row per visit / per different number, spam guard, optional GPS area, and a small
+  "N entries saved today on this phone" line (with an offline note) under the form.
 
 The Google Apps Script that writes to the Enquiry Log sheet (repeat numbers greyed with "Repeat of row X",
 fakes marked Check, bot trap marked Spam) lives in the Apps Script project "UniSmart Enquiry Page"; a copy is kept
