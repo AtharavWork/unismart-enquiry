@@ -53,7 +53,8 @@ footer{text-align:center;font-size:12.5px;color:var(--mut);margin-top:18px;line-
 <script>
 var EXEC = 'https://script.google.com/macros/s/AKfycbyAn6Qen6Fv8gFO_hShxO6vNw-QiLlLMx7Of1HcnGBABBVheT2uyEynhe9NlkbEso6Jog/exec';
 var SOURCE = (function(){try{return (new URLSearchParams(location.search).get('src')||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,30)}catch(e){return ''}})();
-var ID = Date.now().toString(36)+Math.random().toString(36).slice(2,8); // new row for every visit (demo-friendly)
+function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+var ID = newId(), savedNum=''; // new row for every visit, and for every different number typed in the same visit
 var sel={course:[],country:[],intake:[],branch:[]}, timer=null, lastSent='', LOC='', GPS='', geoAsked=false;
 var CONSENT='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.';
 function $(i){return document.getElementById(i)}
@@ -66,7 +67,9 @@ function send(final,cb){var d=data(final),s=JSON.stringify(d);if(!final&&s===las
   var body=JSON.stringify(d);
   fetch(EXEC,{method:'POST',mode:'no-cors',credentials:'omit',keepalive:!final,headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(){cb&&cb(true)}).catch(function(){lastSent='';cb&&cb(false)})}
 var firstSent=false, done=false;
-function soon(){if(!valid()||done)return;clearTimeout(timer);if(!firstSent){firstSent=true;send(false);askGeo();return}timer=setTimeout(function(){send(false)},700)}
+function soon(){if(!valid()||done)return;clearTimeout(timer);var k=phone();
+  if(savedNum&&k.indexOf(savedNum)!==0&&savedNum.indexOf(k)!==0){ID=newId();firstSent=false;lastSent=''}
+  if(!firstSent){firstSent=true;savedNum=k;send(false);askGeo();return}savedNum=k;timer=setTimeout(function(){send(false)},700)}
 function beacon(){if(!valid()||done)return;clearTimeout(timer);var b=JSON.stringify(data(false));if(b===lastSent)return;lastSent=b;try{if(navigator.sendBeacon&&navigator.sendBeacon(EXEC,new Blob([b],{type:'text/plain;charset=utf-8'})))return}catch(e){}lastSent='';send(false)}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')beacon()});
 window.addEventListener('pagehide',beacon);
