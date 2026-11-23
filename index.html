@@ -53,7 +53,7 @@ footer{text-align:center;font-size:12.5px;color:var(--mut);margin-top:18px;line-
 <script>
 var EXEC = 'https://script.google.com/macros/s/AKfycbyAn6Qen6Fv8gFO_hShxO6vNw-QiLlLMx7Of1HcnGBABBVheT2uyEynhe9NlkbEso6Jog/exec';
 var SOURCE = (function(){try{return (new URLSearchParams(location.search).get('src')||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,30)}catch(e){return ''}})();
-var ID = (function(){try{var k='usa_lead_id',v=localStorage.getItem(k);if(!v){v=Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(k,v)}return v}catch(e){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}})();
+var ID = Date.now().toString(36)+Math.random().toString(36).slice(2,8); // new row for every visit (demo-friendly)
 var sel={course:[],country:[],intake:[],branch:[]}, timer=null, lastSent='', LOC='', GPS='', geoAsked=false;
 var CONSENT='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.';
 function $(i){return document.getElementById(i)}
