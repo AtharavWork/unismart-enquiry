@@ -4,7 +4,7 @@
  * - every visit, and every different number in the same visit, gets its own row (nothing is overwritten)
  * - saves wait on the phone (outbox) when there's no network, and are sent later; nothing is dropped
  * - spam guard: max 10 different numbers a minute per phone (extras wait in the outbox), hidden bot trap
- * - event mode: ?src=event&staff=Name -> "Save & next person", today's counter, no limit, no location card
+ * - a small line under the form shows how many entries this phone saved today, and says so when it's offline
  */
 (function () {
   var EXEC = 'https://script.google.com/macros/s/AKfycbyAn6Qen6Fv8gFO_hShxO6vNw-QiLlLMx7Of1HcnGBABBVheT2uyEynhe9NlkbEso6Jog/exec';
@@ -13,8 +13,6 @@
 
   var Q = (function () { try { return new URLSearchParams(location.search); } catch (e) { return { get: function () { return ''; } }; } })();
   var SOURCE = (Q.get('src') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30);
-  var STAFF = (Q.get('staff') || '').replace(/[^\w .'-]/g, '').trim().slice(0, 40);
-  var EVENT = SOURCE === 'event';
 
   function $(i) { return document.getElementById(i); }
   function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
@@ -32,20 +30,35 @@
   function data(final) {
     return { id: ID, cc: cc(), phone: phone(), name: $('name').value.trim(), city: $('city').value.trim(),
       course: sel.course.join(', '), country: sel.country.join(', '), intake: sel.intake.join(', '), branch: sel.branch.join(', '),
-      source: SOURCE, staff: STAFF, loc: LOC, gps: GPS, hp: ($('hp') || {}).value || '', final: !!final };
+      source: SOURCE, loc: LOC, gps: GPS, hp: ($('hp') || {}).value || '', final: !!final };
   }
 
   /* ---------- outbox: every save is kept on the phone until it has gone out ---------- */
   function outbox() { return load('usa_outbox', {}); }
-  function put(p) { var o = outbox(); o[p.id] = p; store('usa_outbox', o); }
-  function drop(p) { var o = outbox(); if (o[p.id] && o[p.id].t === p.t) { delete o[p.id]; store('usa_outbox', o); } }
+  function put(p) { var o = outbox(); o[p.id] = p; store('usa_outbox', o); count(p.id); }
+  function drop(p) { var o = outbox(); if (o[p.id] && o[p.id].t === p.t) { delete o[p.id]; store('usa_outbox', o); } status(); }
+
+  /* ---------- saved count: each new number saved on this phone today = +1 ---------- */
+  var DAY = 'usa_saved_' + new Date().toISOString().slice(0, 10);
+  function count(id) { var d = load(DAY, {}); if (!d[id]) { d[id] = 1; store(DAY, d); } status(); }
+  function status() {
+    var el = $('saved'); if (!el) return;
+    var n = Object.keys(load(DAY, {})).length, w = Object.keys(outbox()).length;
+    if (!n && !w) { el.style.display = 'none'; return; }
+    var e = n + (n === 1 ? ' entry' : ' entries') + ' saved today on this phone';
+    el.className = (!navigator.onLine || w) ? 'off' : '';
+    el.textContent = !navigator.onLine ? '📴 Offline · ' + e + '. ' + (w ? w + ' will send when the internet is back.' : '')
+      : w ? '⏳ ' + e + ' · ' + w + ' sending...' : '✓ ' + e;
+    el.style.display = 'block';
+  }
+  window.addEventListener('offline', status);
   /* spam guard: a NEW number may go out only if fewer than RATE_MAX went out in the last minute */
   function admit(id) {
     var a = load('usa_admitted', {}), now = Date.now();
     if (a[id]) return true;
     var recent = 0;
     for (var k in a) { if (now - a[k] > 86400000) delete a[k]; else if (now - a[k] < RATE_MS) recent++; }
-    if (!EVENT && recent >= RATE_MAX) { store('usa_admitted', a); return false; }
+    if (recent >= RATE_MAX) { store('usa_admitted', a); return false; }
     a[id] = now; store('usa_admitted', a); return true;
   }
   function post(p, cb) {
@@ -66,7 +79,7 @@
       post(p, function () { if (--left === 0) flushing = false; });
     });
   }
-  window.addEventListener('online', flush);
+  window.addEventListener('online', function () { status(); flush(); });
   setInterval(flush, 15000);
 
   function send(final, cb) {
@@ -123,7 +136,7 @@
     fetch('https://ipapi.co/json/').then(function (r) { return r.json(); }).then(function (j) { if (j.error) throw 0; set([j.city, j.region, j.country_name]); })
       .catch(function () { fetch('https://get.geojs.io/v1/ip/geo.json').then(function (r) { return r.json(); }).then(function (j) { set([j.city, j.region, j.country]); }).catch(function () {}); });
   })();
-  function askGeo() { if (EVENT || geoAsked || !navigator.geolocation) return; geoAsked = true; $('geo').style.display = 'block'; }
+  function askGeo() { if (geoAsked || !navigator.geolocation) return; geoAsked = true; $('geo').style.display = 'block'; }
   function geoMsg(t) { $('geot').textContent = t; $('geob').style.display = 'none'; setTimeout(function () { $('geo').style.display = 'none'; }, 2500); }
   $('geon').addEventListener('click', function () { $('geo').style.display = 'none'; });
   $('geoy').addEventListener('click', function () {
@@ -138,41 +151,18 @@
     }, function () { geoMsg('No problem, you can continue.'); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 300000 });
   });
 
-  /* ---------- event mode ---------- */
-  var dayKey = 'usa_evt_' + new Date().toISOString().slice(0, 10) + '_' + STAFF;
-  function showCount() { if (EVENT) $('evcount').textContent = 'Today on this phone: ' + load(dayKey, 0) + ' saved'; }
-  if (EVENT) {
-    document.body.classList.add('event');
-    $('go').textContent = 'Save & next person';
-    $('evbar').style.display = 'block';
-    $('evstaff').textContent = STAFF ? 'Staff: ' + STAFF : 'Add &staff=YourName to the link';
-    $('namelbl').textContent = 'Name';
-    showCount();
-  }
-  function nextPerson() {
-    store(dayKey, load(dayKey, 0) + 1); showCount();
-    $('f').reset(); sel = { course: [], country: [], intake: [], branch: [] };
-    document.querySelectorAll('.chips .on').forEach(function (x) { x.classList.remove('on'); });
-    ID = newId(); savedNum = ''; firstSent = false; lastSent = ''; done = false; GPS = '';
-    $('phone').classList.remove('over'); $('pmsg').textContent = CONSENT;
-    $('go').disabled = false; $('go').textContent = 'Save & next person';
-    $('evok').style.display = 'block'; setTimeout(function () { $('evok').style.display = 'none'; }, 1500);
-    $('phone').focus();
-  }
-
   /* ---------- submit ---------- */
   $('f').addEventListener('submit', function (e) {
     e.preventDefault();
     if (!valid()) { $('pmsg').innerHTML = '<span class="err">' + (phone().length > lim() ? 'Enter ' + lim() + ' digits only.' : 'Please enter the full mobile number.') + '</span>'; $('phone').focus(); return; }
-    if (!EVENT && !$('name').value.trim()) { $('name').focus(); $('name').style.borderColor = '#AC070D'; return; }
+    if (!$('name').value.trim()) { $('name').focus(); $('name').style.borderColor = '#AC070D'; return; }
     clearTimeout(timer); $('go').disabled = true; $('go').textContent = 'Saving...';
     send(true, function () {
-      if (EVENT) return nextPerson();
       done = true;
       $('card').innerHTML = '<div class="done"><div style="font-size:44px">🎉</div><h2>Thank you, ' + $('name').value.trim().replace(/[<>&"]/g, '') +
         '!</h2><p>A UniSmart counsellor will call you within 24 hours.</p><a class="wa" href="https://wa.me/918108772314?text=Hi%20UniSmart%2C%20I%20just%20filled%20the%20enquiry%20form">Chat on WhatsApp now</a></div>';
     });
   });
 
-  flush(); // send anything left on this phone from earlier
+  status(); flush(); // send anything left on this phone from earlier
 })();
