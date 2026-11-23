@@ -2,42 +2,18 @@
 <html lang="en"><head><title>UniSmart Admits | Study Abroad Counselling</title><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--red:#AC070D;--ink:#2A0507;--mut:#6b5557;--line:#ead6d7;--bg:#fbf6f6}
-*{box-sizing:border-box}body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:var(--red);color:#fff;text-align:center;padding:22px 16px 26px;border-radius:0 0 22px 22px}
-header img{height:84px}header h1{font-size:24px;line-height:1.2;margin:10px 0 6px;font-weight:800}
-header p{margin:0;font-size:14px;opacity:.92}
-main{max-width:520px;margin:-14px auto 0;padding:0 16px 40px}
-.card{background:#fff;border-radius:18px;padding:20px 18px;box-shadow:0 6px 24px rgba(172,7,13,.08)}
-label{display:block;font-weight:700;font-size:15px;margin:16px 0 6px}label:first-child{margin-top:0}
-input{width:100%;font:inherit;font-size:17px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
-input:focus{outline:none;border-color:var(--red)}
-.ph{display:flex;gap:8px}.ph select{flex:0 0 112px;font:inherit;font-size:15px;font-weight:700;padding:12px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
-.ph select:focus{outline:none;border-color:var(--red)}input.over{color:var(--red);font-weight:800;border-color:var(--red)}
-#geo{display:none;margin-top:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);font-size:14px;font-weight:600}
-#geo .b{display:flex;gap:8px;margin-top:10px}#geo button{font:inherit;font-size:14px;font-weight:700;padding:8px 16px;border-radius:999px;border:1.5px solid var(--red);cursor:pointer}
-#geo .y{background:var(--red);color:#fff}#geo .n{background:#fff;color:var(--red)}
-.hint{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.4}.err{color:var(--red);font-weight:700}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips button{font:inherit;font-size:14.5px;font-weight:600;padding:9px 13px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
-.chips button.on{background:var(--red);border-color:var(--red);color:#fff}
-.go{width:100%;margin-top:22px;font:inherit;font-size:18px;font-weight:800;padding:15px;border:0;border-radius:14px;background:var(--red);color:#fff;cursor:pointer}
-.go:disabled{opacity:.5}
-.done{text-align:center;padding:28px 10px}.done h2{color:var(--red);margin:6px 0}
-.wa{display:inline-block;margin-top:14px;background:#25D366;color:#fff;text-decoration:none;font-weight:800;padding:12px 20px;border-radius:12px}
-footer{text-align:center;font-size:12.5px;color:var(--mut);margin-top:18px;line-height:1.6}
-</style></head><body>
+<link rel="stylesheet" href="assets/style.css?v=5"></head><body>
 <header><img alt="UniSmart Admits" src="data:image/png;base64,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">
 <h1>Study abroad in 2027?<br>Talk to a UniSmart counsellor</h1>
 <p>Fill this in and we'll call you within 24 hours.</p></header>
 <main><div class="card" id="card">
 <form id="f" novalidate>
+<div id="evbar"><span id="evstaff"></span><span id="evcount"></span></div>
 <label for="phone">Phone / WhatsApp number *</label>
 <div class="ph"><select id="cc" aria-label="Country code"><option value="">Code</option><option value="91">🇮🇳 +91</option><option value="971">🇦🇪 +971</option><option value="1">🇺🇸 +1</option><option value="44">🇬🇧 +44</option><option value="61">🇦🇺 +61</option><option value="65">🇸🇬 +65</option><option value="64">🇳🇿 +64</option><option value="974">🇶🇦 +974</option><option value="966">🇸🇦 +966</option><option value="968">🇴🇲 +968</option><option value="965">🇰🇼 +965</option><option value="973">🇧🇭 +973</option><option value="977">🇳🇵 +977</option><option value="94">🇱🇰 +94</option><option value="880">🇧🇩 +880</option><option value="49">🇩🇪 +49</option><option value="33">🇫🇷 +33</option><option value="353">🇮🇪 +353</option><option value="39">🇮🇹 +39</option></select><input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="[0-9]*" placeholder="Mobile number" required></div>
 <div class="hint" id="pmsg">By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.</div>
 <div id="geo"><span id="geot">📍 Share your area so we can suggest your nearest branch?</span><div class="b" id="geob"><button type="button" class="y" id="geoy">Yes, share</button><button type="button" class="n" id="geon">Skip</button></div></div>
-<label for="name">Your name *</label><input id="name" autocomplete="name" placeholder="Full name" required>
+<label for="name" id="namelbl">Your name *</label><input id="name" autocomplete="name" placeholder="Full name" required>
 <label for="city">City</label><input id="city" autocomplete="address-level2" placeholder="e.g. Mumbai, Thane, Pune">
 <label>What do you want to study?</label><div class="chips" data-k="course" data-one="1">
 <button type="button">UG: Engineering</button><button type="button">UG: MBBS</button><button type="button">PG: MS</button><button type="button">PG: MBA</button><button type="button">PG: Other Masters</button><button type="button">Not sure yet</button></div>
@@ -47,59 +23,9 @@ footer{text-align:center;font-size:12.5px;color:var(--mut);margin-top:18px;line-
 <button type="button">2026</button><button type="button">2027</button><button type="button">2028 or later</button><button type="button">Not sure yet</button></div>
 <label>Nearest branch</label><div class="chips" data-k="branch" data-one="1">
 <button type="button">BKC</button><button type="button">Andheri</button><button type="button">Ghatkopar</button><button type="button">Churchgate</button><button type="button">Thane</button><button type="button">Virar</button><button type="button">Online</button></div>
+<div id="hpw" aria-hidden="true"><label for="hp">Website</label><input id="hp" name="company_website" tabindex="-1" autocomplete="off"></div>
 <button class="go" id="go" type="submit">Request a call back</button>
+<div id="evok">✓ Saved. Next person.</div>
 </form></div>
 <footer>BKC (HQ) · Andheri · Ghatkopar · Churchgate · Thane · Virar<br>Ghar Ki Lectures Se Break, Global Lectures Await!</footer></main>
-<script>
-var EXEC = 'https://script.google.com/macros/s/AKfycbyAn6Qen6Fv8gFO_hShxO6vNw-QiLlLMx7Of1HcnGBABBVheT2uyEynhe9NlkbEso6Jog/exec';
-var SOURCE = (function(){try{return (new URLSearchParams(location.search).get('src')||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,30)}catch(e){return ''}})();
-function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
-var ID = newId(), savedNum=''; // new row for every visit, and for every different number typed in the same visit
-var sel={course:[],country:[],intake:[],branch:[]}, timer=null, lastSent='', LOC='', GPS='', geoAsked=false;
-var CONSENT='By entering your number, you agree that UniSmart Admits may call or WhatsApp you about study abroad. We never share your details.';
-function $(i){return document.getElementById(i)}
-function cc(){return $('cc').value}
-function lim(){return (cc()===''||cc()==='91')?10:15}
-function phone(){return $('phone').value.replace(/\D/g,'')}
-function valid(){var n=phone().length;return lim()===10?n===10:(n>=6&&n<=15)}
-function data(final){return{id:ID,cc:cc(),loc:LOC,gps:GPS,phone:phone(),name:$('name').value.trim(),city:$('city').value.trim(),course:sel.course.join(', '),country:sel.country.join(', '),intake:sel.intake.join(', '),branch:sel.branch.join(', '),source:SOURCE,final:!!final}}
-function send(final,cb){var d=data(final),s=JSON.stringify(d);if(!final&&s===lastSent)return;lastSent=s;
-  var body=JSON.stringify(d);
-  fetch(EXEC,{method:'POST',mode:'no-cors',credentials:'omit',keepalive:!final,headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(){cb&&cb(true)}).catch(function(){lastSent='';cb&&cb(false)})}
-var firstSent=false, done=false;
-function soon(){if(!valid()||done)return;clearTimeout(timer);var k=phone();
-  if(savedNum&&k.indexOf(savedNum)!==0&&savedNum.indexOf(k)!==0){ID=newId();firstSent=false;lastSent=''}
-  if(!firstSent){firstSent=true;savedNum=k;send(false);askGeo();return}savedNum=k;timer=setTimeout(function(){send(false)},700)}
-function beacon(){if(!valid()||done)return;clearTimeout(timer);var b=JSON.stringify(data(false));if(b===lastSent)return;lastSent=b;try{if(navigator.sendBeacon&&navigator.sendBeacon(EXEC,new Blob([b],{type:'text/plain;charset=utf-8'})))return}catch(e){}lastSent='';send(false)}
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')beacon()});
-window.addEventListener('pagehide',beacon);
-function check(e){var p=$('phone'),c=p.value.replace(/\D/g,'');
-  if(c.length===12&&c.indexOf('91')===0&&cc()===''){$('cc').value='91';c=c.slice(2)}
-  if(c.length>lim()&&!(e&&e.inputType==='insertFromPaste')&&!p.classList.contains('over'))c=c.slice(0,lim());
-  if(c!==p.value)p.value=c;var m=$('pmsg'),over=c.length>lim();p.classList.toggle('over',over);
-  if(over){m.innerHTML='<span class="err">Enter '+lim()+' digits only'+(lim()===10?'':' (max)')+'.</span>'}else{m.textContent=CONSENT}soon()}
-function askGeo(){if(geoAsked||!navigator.geolocation)return;geoAsked=true;$('geo').style.display='block'}
-function geoMsg(t){$('geot').textContent=t;$('geob').style.display='none';setTimeout(function(){$('geo').style.display='none'},2500)}
-$('geon').addEventListener('click',function(){$('geo').style.display='none'});
-$('geoy').addEventListener('click',function(){$('geot').textContent='📍 Getting your area...';$('geob').style.display='none';
-  navigator.geolocation.getCurrentPosition(function(pos){var la=pos.coords.latitude.toFixed(5),lo=pos.coords.longitude.toFixed(5),ll=' ('+la+', '+lo+')';
-    function done2(t){GPS=(t?t:'')+ll;GPS=GPS.trim();lastSent='';soon();geoMsg('📍 Thanks! '+(t||'Location saved')+'.')}
-    fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+la+'&longitude='+lo+'&localityLanguage=en').then(function(r){return r.json()})
-    .then(function(j){var a=[j.locality,j.city,j.principalSubdivision].filter(function(x,i,arr){return x&&arr.indexOf(x)===i});done2(a.join(', '))}).catch(function(){done2('')})},
-  function(){geoMsg('No problem, you can continue.')},{enableHighAccuracy:true,timeout:15000,maximumAge:300000})});
-$('phone').addEventListener('input',check);
-$('cc').addEventListener('change',check);
-(function(){function set(a){var t=a.filter(function(x){return x}).join(', ');if(t){LOC=t.slice(0,120);soon()}}
-  fetch('https://ipapi.co/json/').then(function(r){return r.json()}).then(function(j){if(j.error)throw 0;set([j.city,j.region,j.country_name])})
-  .catch(function(){fetch('https://get.geojs.io/v1/ip/geo.json').then(function(r){return r.json()}).then(function(j){set([j.city,j.region,j.country])}).catch(function(){})})})();
-['phone','name','city'].forEach(function(i){$(i).addEventListener('blur',soon);$(i).addEventListener('input',soon)});
-document.querySelectorAll('.chips').forEach(function(g){g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var k=g.dataset.k,v=b.textContent;
-  if(g.dataset.one){g.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});sel[k]=[v];b.classList.add('on')}else{b.classList.toggle('on');sel[k]=[].map.call(g.querySelectorAll('.on'),function(x){return x.textContent})}soon()})});
-$('f').addEventListener('submit',function(e){e.preventDefault();
-  if(!valid()){$('pmsg').innerHTML='<span class="err">'+(phone().length>lim()?'Enter '+lim()+' digits only.':'Please enter your full mobile number.')+'</span>';$('phone').focus();return}
-  if(!$('name').value.trim()){$('name').focus();$('name').style.borderColor='#AC070D';return}
-  clearTimeout(timer);$('go').disabled=true;$('go').textContent='Sending...';
-  send(true,function(ok){if(ok){done=true;try{localStorage.removeItem('usa_lead_id')}catch(e){}
-    $('card').innerHTML='<div class="done"><div style="font-size:44px">🎉</div><h2>Thank you, '+$('name').value.trim().replace(/[<>&"]/g,'')+'!</h2><p>A UniSmart counsellor will call you within 24 hours.</p><a class="wa" href="https://wa.me/918108772314?text=Hi%20UniSmart%2C%20I%20just%20filled%20the%20enquiry%20form">Chat on WhatsApp now</a></div>'}
-    else{$('go').disabled=false;$('go').textContent='Request a call back';alert('Network problem. Please try again, or WhatsApp us on 81087 72314.')}})});
-</script></body></html>
+<script src="assets/app.js?v=5"></script></body></html>
